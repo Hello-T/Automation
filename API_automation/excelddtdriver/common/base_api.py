@@ -1,8 +1,8 @@
 # coding:utf-8
 import json
 import requests
-from excelddtdriver.common.readexcel import ExcelUtil
-from excelddtdriver.common.writeexcel import copy_excel, Write_excel
+from API_automation.excelddtdriver.common.readexcel import ExcelUtil
+from API_automation.excelddtdriver.common.writeexcel import copy_excel, Write_excel
 import base64
 import hashlib
 
@@ -41,28 +41,30 @@ def send_requests(s, testdata):
     except:
         bodydata = {}
 
-    #判断此接口是否是加密请求
+    # 判断此接口是否是加密请求
     try:
         encrypt = testdata["encrypt"]
     except:
-        encrypt=None
-
-    #判断data是否需要加密
-    if encrypt==0:
-        bodydata_T=bodydata
-    else:
-        bodydata_encrypt=base64.b64encode(str(curlmd5(json.dumps(bodydata) + curlmd5('OWNjZGY0MmNmOE1U'))[0:10]+str(base64.b64encode(json.dumps(bodydata).encode('utf-8')),'utf-8')).encode('utf-8')).decode()
-        bodydata_T=bodydata_encrypt
-
+        encrypt = None
 
     # 判断传data数据还是json
     if type == "data":
-        body = bodydata_T
+        body = bodydata
     elif type == "json":
-        body = json.dumps(bodydata_T)
+        body = json.dumps(bodydata)
     else:
-        body = bodydata_T
-    if method == "post": print("post请求body类型为：%s ,body内容为：%s" % (type, body))
+        body = bodydata
+
+    #判断data是否需要加密
+    if encrypt==0:
+        bodya=body
+    else:
+        bodydata_encrypt=base64.b64encode(str(curlmd5(json.dumps(body) + curlmd5('OWNjZGY0MmNmOE1U'))[0:10]+str(base64.b64encode(json.dumps(body).encode('utf-8')),'utf-8')).encode('utf-8')).decode()
+        bodya={"param":bodydata_encrypt,"tokenid":"NzJmOTM5MTE4OE1UVXlPVGs0TWpZMk1EazBOQT09"}
+
+
+    if method == "post":
+        print("post请求body类型为：%s ,body内容为：%s" % (type, bodya))
 
     verify = False
     res = {}   # 接受返回数据
@@ -72,7 +74,7 @@ def send_requests(s, testdata):
                       url=url,
                       params=params,
                       headers=headers,
-                      data=body,
+                      data=bodya,
                       verify=verify
                        )
         print("页面返回信息：%s" % r.content.decode("utf-8"))

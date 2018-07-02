@@ -1,10 +1,9 @@
 # coding=utf-8
 import unittest
 import time
-from excelddtdriver.common import HTMLTestRunner_jpg
+from API_automation.excelddtdriver.common import HTMLTestRunner_jpg
 import os
 import datetime
-
 
 
 curpath = os.path.dirname(os.path.realpath(__file__))

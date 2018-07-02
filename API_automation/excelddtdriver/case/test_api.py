@@ -3,9 +3,9 @@ import unittest
 import ddt
 import os
 import requests
-from excelddtdriver.common import base_api
-from excelddtdriver.common import readexcel
-from excelddtdriver.common import writeexcel
+from API_automation.excelddtdriver.common import base_api
+from API_automation.excelddtdriver.common import readexcel
+from API_automation.excelddtdriver.common import writeexcel
 
 
 
