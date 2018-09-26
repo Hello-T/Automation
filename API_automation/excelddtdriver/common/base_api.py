@@ -58,6 +58,18 @@ def send_requests(s, testdata):
     #判断data是否需要加密
     if encrypt==0:
         bodya=body
+    elif encrypt==1:
+        ph = 17744332211
+        pw = 'e10adc3949ba59abbe56e057f20f883e'
+        a = {
+            "phone": ph,
+            "password": pw
+        }
+        r = requests.post("https://qaapi.maizicare.com/api/user/login", data=a)
+        d = r.json()
+        x = d.get("data")
+        y = x.get("token")
+        params["token"]=y
     else:
         bodydata_encrypt=base64.b64encode(str(curlmd5(json.dumps(body) + curlmd5('OWNjZGY0MmNmOE1U'))[0:10]+str(base64.b64encode(json.dumps(body).encode('utf-8')),'utf-8')).encode('utf-8')).decode()
         bodya={"param":bodydata_encrypt,"tokenid":"NzJmOTM5MTE4OE1UVXlPVGs0TWpZMk1EazBOQT09"}
@@ -65,6 +77,8 @@ def send_requests(s, testdata):
 
     if method == "post":
         print("post请求body类型为：%s ,body内容为：%s" % (type, bodya))
+    elif method=="get":
+        print("get请求params类型为：%s,params内容为：%s" % (type, params))
 
     verify = False
     res = {}   # 接受返回数据
@@ -80,7 +94,7 @@ def send_requests(s, testdata):
         print("页面返回信息：%s" % r.content.decode("utf-8"))
         res['id'] = testdata['id']
         res['rowNum'] = testdata['rowNum']
-        res["statuscode"] = str(r.status_code)  # 状态码转成str
+        res["statuscode"] = str(r.status_code)  # 状态码转成strsssss
         res["text"] = r.content.decode("utf-8")
         res["times"] = str(r.elapsed.total_seconds())   # 接口请求时间转str
         if res["statuscode"] != "200":
